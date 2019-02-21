@@ -154,7 +154,7 @@ app.get('/celebrities/add', function(req, res) {
      });
 
 
-     //delete 
+     //delete celebrity
      app.delete('/celeb/:id', function(req, res) {
        let query = {_id: req.params.id}
 
@@ -250,6 +250,19 @@ app.get('/films/add', function(req, res) {
          }
     });
    });
+
+     //delete movie
+     app.delete('/film/:id', function(req, res) {
+      let query = {_id: req.params.id}
+
+      Film.remove(query, function(err) {
+        if(err) {
+          console.log(err);
+        }
+        res.send('Success');
+      })
+    })
+ 
     
 
 app.listen(3000, () => {
