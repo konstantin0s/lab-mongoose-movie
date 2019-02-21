@@ -214,6 +214,42 @@ app.get('/films/add', function(req, res) {
     });
    });
 
+    //load edit movie form
+    app.get('/film/edit/:id', function(req, res) {
+      Film.findOne({_id: req.params.id}, function(err, film) {
+        if (err) {
+          console.log(err);
+        } else {
+          res.render('edit_film',
+          {film: film});
+        }
+      });
+    });
+
+    //  update movie submit
+  app.get('/films/add', function(req, res) {
+    res.render('add_film');
+    });
+  
+   //add submit POST route
+   app.post('/films/edit/:id', function(req, res) {
+  
+    let mov = {};
+    mov.title = req.body.title;
+    mov.genre = req.body.genre;
+    mov.plot = req.body.plot;
+
+    let query = { _id:req.params.id}
+ 
+    Film.update(query, mov, function(err) {
+         if (err) {
+           console.log(err);
+           return;
+         } else {
+           res.redirect('/films');
+         }
+    });
+   });
     
 
 app.listen(3000, () => {
