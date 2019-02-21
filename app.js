@@ -18,9 +18,9 @@ mongoose
   .catch(err => {
     console.error('Error connecting to mongo', err)
   });
-
+// comment one connection to use a specific database ie. (celebrities or movies)
   mongoose
-  .connect('mongodb://localhost/movies', {useNewUrlParser: true})
+  .connect('mongodb://localhost/films', {useNewUrlParser: true})
   .then(x => {
     console.log(`Connected to Mongo! Database name: "${x.connections[0].name}"`)
   })
@@ -34,7 +34,7 @@ const debug = require('debug')(`${app_name}:${path.basename(__filename).split('.
 const app = express();
 
 let Celebrity = require('./models/celebrity');
-let Movie = require('./models/movie');
+let Film = require('./models/film');
 
 // Middleware Setup
 app.use(logger('dev'));
@@ -167,17 +167,29 @@ app.get('/celebrities/add', function(req, res) {
      })
   
      //Add movie route
-     app.get('/movies', (req, res) => {
-      Movie.find({}, (err, movies) => {
+     app.get('/films', (req, res) => {
+      Film.find({}, (err, films) => {
         if (err) {
           console.log(err);
         } else {
-          res.render('movies',
-          {movies: movies});
+          res.render('films',
+          {films: films});
         }
         
       });
     });
+
+    //get Single movie
+app.get('/film/:id', function(req, res) {
+  Film.findOne({_id: req.params.id}, function(err, film) {
+    if (err) {
+      console.log(err);
+    } else {
+      res.render('film',
+      {film: film});
+    }
+  });
+})
     
 
 app.listen(3000, () => {

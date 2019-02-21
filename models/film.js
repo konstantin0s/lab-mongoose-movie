@@ -1,7 +1,7 @@
 let mongoose = require('mongoose');
 
 //Movie schema
-let movieSchema = mongoose.Schema({
+let filmSchema = mongoose.Schema({
   title: {
     type: String,
     required: true
@@ -16,4 +16,4 @@ let movieSchema = mongoose.Schema({
   }
 });
 
-let Movie = module.exports = mongoose.model('Movie', movieSchema);
+let Film = module.exports = mongoose.model('Film', filmSchema);
