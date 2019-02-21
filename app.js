@@ -11,7 +11,7 @@ const path         = require('path');
 
 
 mongoose
-  .connect('mongodb://localhost/starter-code', {useNewUrlParser: true})
+  .connect('mongodb://localhost/celebrities', {useNewUrlParser: true})
   .then(x => {
     console.log(`Connected to Mongo! Database name: "${x.connections[0].name}"`)
   })
@@ -54,5 +54,45 @@ app.locals.title = 'Express - Generated with IronGenerator';
 const index = require('./routes/index');
 app.use('/', index);
 
+let Celebrity = require('./models/celebrity');
+
+app.get('/celebrities', (req, res) => {
+  Celebrity.find({}, (err, celebrities) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.render('celebrities',
+      {celebrities: celebrities});
+    }
+    
+  });
+});
+
+//get Single celebrity
+app.get('/celeb/:id', function(req, res) {
+  debugger
+  Celebrity.findOne({_id: req.params.id}, function(err, celeb) {
+    if (err) {
+      console.log(err);
+      debugger
+    } else {
+      debugger
+      res.render('celeb',
+      {celeb: celeb});
+    }
+  });
+})
+
+// app.get('/celeb/:id', function(req, res) {
+//   Celebrity.findById(req.params.id, function(err, celeb) {
+//     console.log(celeb);
+//     return;
+//   });
+// })
+
+
+app.listen(3000, () => {
+  console.log('Server started on port 3000');
+});
 
 module.exports = app;
