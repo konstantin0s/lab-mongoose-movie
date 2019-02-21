@@ -83,13 +83,29 @@ app.get('/celeb/:id', function(req, res) {
   });
 })
 
-// app.get('/celeb/:id', function(req, res) {
-//   Celebrity.findById(req.params.id, function(err, celeb) {
-//     console.log(celeb);
-//     return;
-//   });
-// })
+//add route
+app.get('/celebrities/add', function(req, res) {
+  res.render('add_celebrity');
+  });
 
+   //add submit POST route
+   app.post('/celebrities/add', function(req, res) {
+     console.log('submitted');
+     return;
+    // let celebrity = new Celebrity();
+    // celebrity.name = req.body.name;
+    // celebrity.occupation = req.body.occupation;
+    // celebrity.catchPhrase = req.body.catchPhrase;
+ 
+    // celebrity.save(function(err) {
+    //      if (err) {
+    //        console.log(err);
+    //        return;
+    //      } else {
+    //        res.redirect('/');
+    //      }
+    // });
+   });
 
 app.listen(3000, () => {
   console.log('Server started on port 3000');
