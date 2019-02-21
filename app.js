@@ -72,13 +72,10 @@ app.get('/celebrities', (req, res) => {
 
 //get Single celebrity
 app.get('/celeb/:id', function(req, res) {
-  debugger
   Celebrity.findOne({_id: req.params.id}, function(err, celeb) {
     if (err) {
       console.log(err);
-      debugger
     } else {
-      debugger
       res.render('celeb',
       {celeb: celeb});
     }
@@ -107,6 +104,45 @@ app.get('/celebrities/add', function(req, res) {
          }
     });
    });
+
+   //load edit form
+   app.get('/celeb/edit/:id', function(req, res) {
+    Celebrity.findOne({_id: req.params.id}, function(err, celeb) {
+      if (err) {
+        console.log(err);
+      } else {
+        res.render('edit_celeb',
+        {celeb: celeb});
+      }
+    });
+  });
+
+
+  //update submit
+  app.get('/celebrities/add', function(req, res) {
+    res.render('add_celebrity');
+    });
+  
+     //add submit POST route
+     app.post('/celebrities/edit/:id', function(req, res) {
+  
+      let celebr = {};
+      celebr.name = req.body.name;
+      celebr.occupation = req.body.occupation;
+      celebr.catchPhrase = req.body.catchPhrase;
+
+      let query = { _id:req.params.id}
+   
+      Celebrity.update(query, celebr, function(err) {
+           if (err) {
+             console.log(err);
+             return;
+           } else {
+             res.redirect('/celebrities');
+           }
+      });
+     });
+  
 
 app.listen(3000, () => {
   console.log('Server started on port 3000');
