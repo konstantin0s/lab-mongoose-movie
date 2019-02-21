@@ -19,12 +19,22 @@ mongoose
     console.error('Error connecting to mongo', err)
   });
 
+  mongoose
+  .connect('mongodb://localhost/movies', {useNewUrlParser: true})
+  .then(x => {
+    console.log(`Connected to Mongo! Database name: "${x.connections[0].name}"`)
+  })
+  .catch(err => {
+    console.error('Error connecting to mongo', err)
+  });
+
 const app_name = require('./package.json').name;
 const debug = require('debug')(`${app_name}:${path.basename(__filename).split('.')[0]}`);
 
 const app = express();
 
 let Celebrity = require('./models/celebrity');
+let Movie = require('./models/movie');
 
 // Middleware Setup
 app.use(logger('dev'));
@@ -156,6 +166,19 @@ app.get('/celebrities/add', function(req, res) {
        })
      })
   
+     //Add movie route
+     app.get('/movies', (req, res) => {
+      Movie.find({}, (err, movies) => {
+        if (err) {
+          console.log(err);
+        } else {
+          res.render('movies',
+          {movies: movies});
+        }
+        
+      });
+    });
+    
 
 app.listen(3000, () => {
   console.log('Server started on port 3000');
