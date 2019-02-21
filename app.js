@@ -1,13 +1,13 @@
 require('dotenv').config();
 
-const bodyParser   = require('body-parser');
-const cookieParser = require('cookie-parser');
 const express      = require('express');
 const favicon      = require('serve-favicon');
 const hbs          = require('hbs');
 const mongoose     = require('mongoose');
 const logger       = require('morgan');
 const path         = require('path');
+const bodyParser   = require('body-parser');
+const cookieParser = require('cookie-parser');
 
 
 mongoose
@@ -24,10 +24,12 @@ const debug = require('debug')(`${app_name}:${path.basename(__filename).split('.
 
 const app = express();
 
+let Celebrity = require('./models/celebrity');
+
 // Middleware Setup
 app.use(logger('dev'));
-app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 app.use(cookieParser());
 
 // Express View engine setup
@@ -37,6 +39,7 @@ app.use(require('node-sass-middleware')({
   dest: path.join(__dirname, 'public'),
   sourceMap: true
 }));
+
       
 
 app.set('views', path.join(__dirname, 'views'));
@@ -54,7 +57,6 @@ app.locals.title = 'Express - Generated with IronGenerator';
 const index = require('./routes/index');
 app.use('/', index);
 
-let Celebrity = require('./models/celebrity');
 
 app.get('/celebrities', (req, res) => {
   Celebrity.find({}, (err, celebrities) => {
@@ -90,21 +92,20 @@ app.get('/celebrities/add', function(req, res) {
 
    //add submit POST route
    app.post('/celebrities/add', function(req, res) {
-     console.log('submitted');
-     return;
-    // let celebrity = new Celebrity();
-    // celebrity.name = req.body.name;
-    // celebrity.occupation = req.body.occupation;
-    // celebrity.catchPhrase = req.body.catchPhrase;
+
+    let celebr = new Celebrity();
+    celebr.name = req.body.name;
+    celebr.occupation = req.body.occupation;
+    celebr.catchPhrase = req.body.catchPhrase;
  
-    // celebrity.save(function(err) {
-    //      if (err) {
-    //        console.log(err);
-    //        return;
-    //      } else {
-    //        res.redirect('/');
-    //      }
-    // });
+    celebr.save(function(err) {
+         if (err) {
+           console.log(err);
+           return;
+         } else {
+           res.redirect('/celebrities');
+         }
+    });
    });
 
 app.listen(3000, () => {
