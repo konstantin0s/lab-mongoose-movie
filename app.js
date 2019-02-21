@@ -142,6 +142,19 @@ app.get('/celebrities/add', function(req, res) {
            }
       });
      });
+
+
+     //delete 
+     app.delete('/celeb/:id', function(req, res) {
+       let query = {_id: req.params.id}
+
+       Celebrity.remove(query, function(err) {
+         if(err) {
+           console.log(err);
+         }
+         res.send('Success');
+       })
+     })
   
 
 app.listen(3000, () => {
