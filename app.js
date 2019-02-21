@@ -190,6 +190,30 @@ app.get('/film/:id', function(req, res) {
     }
   });
 })
+
+//add route
+app.get('/films/add', function(req, res) {
+  res.render('add_film');
+  });
+
+   //add submit POST route
+   app.post('/films/add', function(req, res) {
+
+    let newFilm = new Film();
+    newFilm.title = req.body.title;
+    newFilm.genre = req.body.genre;
+    newFilm.plot = req.body.plot;
+
+    newFilm.save(function(err) {
+         if (err) {
+           console.log(err);
+           return;
+         } else {
+           res.redirect('/films');
+         }
+    });
+   });
+
     
 
 app.listen(3000, () => {
