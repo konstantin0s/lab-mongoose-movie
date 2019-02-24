@@ -2,8 +2,12 @@ const LocalStrategy = require('passport-local').Strategy;
 const User = require('../models/user');
 const config = require('../config/database');
 const bcrypt = require('bcryptjs');
+const session = require('express-session');
+const expressValidator = require('express-validator');
+const passport = require('passport');
 
 module.exports = (passport) => {
+
   //Local Strategy
   passport.use(new LocalStrategy((username, password, done) => {
     //match username
@@ -25,6 +29,11 @@ module.exports = (passport) => {
       });
     })
   }));
+ 
+  //serialize user
+  passport.serializeUser((user, done) => {
+    done(null, user.id)
+  });
 
   //deserialize
   passport.deserializeUser((id, done) => {
@@ -32,4 +41,9 @@ module.exports = (passport) => {
       done(error, user);
     });
   })
+
+
+
 }
+
+

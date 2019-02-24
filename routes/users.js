@@ -1,11 +1,15 @@
+const flash = require('connect-flash');
 const express = require('express');
 const router  = express.Router();
 const bcrypt = require('bcryptjs');
 const bodyParser   = require('body-parser');
+const session = require('express-session');
 const expressValidator = require('express-validator');
-const flash  = require('flash');
+const passport = require('passport');
+
 
 router.use(expressValidator());
+router.use(passport.initialize());
 
 let User = require('../models/user');
 
@@ -68,6 +72,14 @@ router.post('/register', (req, res)=> {
 //login router
 router.get('/login', (req, res)=> {
    res.render('login');
-})
+});
+
+router.post('/login', (req, res, next) => {
+  passport.authenticate('local', {
+    successRedirect: '/',
+    failureRedirect: '/users/login',
+    failureFlash: false
+  })(req, res, next);
+});
 
 module.exports = router;

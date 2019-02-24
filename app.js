@@ -1,5 +1,4 @@
 require('dotenv').config();
-
 const express      = require('express');
 const favicon      = require('serve-favicon');
 const hbs          = require('hbs');
@@ -9,7 +8,12 @@ const path         = require('path');
 const bodyParser   = require('body-parser');
 const cookieParser = require('cookie-parser');
 const passport = require('passport');
+const expressValidator = require('express-validator');
+const flash = require('connect-flash');
+const session = require('express-session');
 const config = require('./config/database');
+
+
 
 mongoose
   .connect(config.database, {useNewUrlParser: true})
@@ -54,7 +58,8 @@ app.use(require('node-sass-middleware')({
       
 
 app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'hbs');
+app.set('view engine', 'hbs',);
+hbs.registerPartials(path.join(__dirname, "/views/partials"));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(favicon(path.join(__dirname, 'public', 'images', 'favicon.ico')));
 
@@ -63,6 +68,7 @@ const index = require('./routes/index');
 app.use('/', index);
 const users = require('./routes/users');
 app.use('/users', users);
+
 
 // default value for title local
 app.locals.title = 'Express - Generated with IronGenerator';
@@ -263,11 +269,53 @@ app.get('/films/add', function(req, res) {
       })
     })
     
+    app.use(flash());
+
+//express messages middleware
+app.use(require('connect-flash')());
+app.use((req, res, next) => {
+   res.locals.messages = require('express-messages')(req, res);
+   next();
+})
+
+//express validator middleware
+app.use(expressValidator({
+  errorFormatter: function(param, msg, value) {
+      var namespace = param.split('.')
+      , root    = namespace.shift()
+      , formParam = root;
+
+    while(namespace.length) {
+      formParam += '[' + namespace.shift() + ']';
+    }
+    return {
+      param : formParam,
+      msg   : msg,
+      value : value
+    };
+  }
+}));
+
     //passport config
     require('./config/passport')(passport);
     //passport middleware
     app.use(passport.initialize());
     app.use(passport.session());
+
+    app.use(function(req, res, next){
+      // if there's a flash message in the session request, make it available 
+        res.locals.sessionFlash = req.session.sessionFlash;
+        delete req.session.sessionFlash;
+        next();
+      });
+    
+      //express session middleware
+    app.use(session({
+      secret: 'keyboard cat',
+      resave: true,
+      saveUninitialized: true
+    }));
+    
     
 
 app.listen(3000, () => {
