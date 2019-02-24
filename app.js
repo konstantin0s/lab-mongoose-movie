@@ -8,10 +8,11 @@ const logger       = require('morgan');
 const path         = require('path');
 const bodyParser   = require('body-parser');
 const cookieParser = require('cookie-parser');
-
+const passport = require('passport');
+const config = require('./config/database');
 
 mongoose
-  .connect('mongodb://localhost/celebrities', {useNewUrlParser: true})
+  .connect(config.database, {useNewUrlParser: true})
   .then(x => {
     console.log(`Connected to Mongo! Database name: "${x.connections[0].name}"`)
   })
@@ -20,7 +21,7 @@ mongoose
   });
 // comment one connection to use a specific database ie. (celebrities or movies)
   mongoose
-  .connect('mongodb://localhost/films', {useNewUrlParser: true})
+  .connect(config.database, {useNewUrlParser: true})
   .then(x => {
     console.log(`Connected to Mongo! Database name: "${x.connections[0].name}"`)
   })
@@ -261,7 +262,12 @@ app.get('/films/add', function(req, res) {
         res.send('Success');
       })
     })
- 
+    
+    //passport config
+    require('./config/passport')(passport);
+    //passport middleware
+    app.use(passport.initialize());
+    app.use(passport.session());
     
 
 app.listen(3000, () => {
