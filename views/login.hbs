@@ -7,24 +7,20 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css" integrity="sha384-Zug+QiDoJOrZ5t4lssLdxGhVrurbmBWopoEl+M6BdEfwnCJZtKxi1KgxUyJq13dy"
     crossorigin="anonymous">
   <link rel="stylesheet" href="/stylesheets/style.css">
-  <title>Add Movie</title>
+  <title>Login</title>
 </head>
 <body>
-  <h1>Add Movie</h1>
-<form method="POST" action="/films/add">
+  <h1> Login</h1>
+<form method="POST" action="/users/login">
 <div id="form-group">
-  <label for="title">Title:</label>
-  <input type="text" name="title" class="form-control">
+  <label for="username">Username:</label>
+ <input name="username" id="" class="form-control">
 </div>
 <div id="form-group">
-  <label for="genre">Genre:</label>
-  <input type="text" name="genre" class="form-control">
+  <label for="password">Password:</label>
+  <input type="password" name="password" class="form-control">
 </div>
-<div id="form-group">
-  <label for="plot">Plot:</label>
- <textarea name="plot" id="" cols="30" rows="10" class="form-control"></textarea>
- <input type="submit" class="btn btn-primary" value="Submit">
-</div>
+<input type="submit" class="btn btn-primary" value="Submit">
 </form>
 
 </body>

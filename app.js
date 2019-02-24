@@ -58,14 +58,13 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(favicon(path.join(__dirname, 'public', 'images', 'favicon.ico')));
 
 
+const index = require('./routes/index');
+app.use('/', index);
+const users = require('./routes/users');
+app.use('/users', users);
 
 // default value for title local
 app.locals.title = 'Express - Generated with IronGenerator';
-
-
-
-const index = require('./routes/index');
-app.use('/', index);
 
 
 app.get('/celebrities', (req, res) => {
